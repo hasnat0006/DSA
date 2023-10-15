@@ -1,71 +1,96 @@
-//!-----------------------------------------------------!//
-//!                  YUSUF REZA HASNAT                  !//
-//!-----------------------------------------------------!//
-
-#pragma GCC optimize("O3")
 #include <bits/stdc++.h>
-#ifndef ONLINE_JUDGE
-#include "C:\Users\Yusuf Reza Hasnat\OneDrive\Desktop\CP\debug.h"
-#else
-#define dbg(x...)
-#define dbgc(x...)
-#endif
-
 using namespace std;
 
-#define int long long
-#define float long double
-#define pb push_back
-#define vf(v) (v).begin(), (v).end()
-#define vr(v) (v).rbegin(), (v).rend()
-#define dosomic(x) fixed << setprecision(x)
-#define endl "\n"
-#define case(x) cout << "Case " << x << ": "
-#define YUSUF ios_base::sync_with_stdio(false),
-#define REZA cin.tie(NULL),
-#define HASNAT cout.tie(NULL)
-
-int mod = 1000000007;
-float pi = acos(-1);
-int inf = 1e18;
-int dp[1000][1000], mark[1000][1000];
-
-void print_string(int i, int j, string a) {
-    if (i == 0 or j == 0)
-        return;
-    if (mark[i][j] == 1)
-        print_string(i - 1, j - 1, a), cout << a[i - 1];
-    else if (mark[i][j] == 2)
-        print_string(i - 1, j, a);
-    else if (mark[i][j] == 3)
-        print_string(i, j - 1, a);
-}
-
-void solve() {
-    string a, b;
-    cin >> a >> b;
-    int n = a.size(), m = b.size();
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= m; j++) {
-            if (a[i - 1] == b[j - 1])
-                dp[i][j] = 1 + dp[i - 1][j - 1], mark[i][j] = 1; //todo -> 1 for diagonal
-            else {
-                dp[i - 1][j] > dp[i][j - 1] ? mark[i][j] = 2 : mark[i][j] = 3; //todo -> 2 for top, 3 for left;
-                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);
-            }
+class Node {
+   public:
+    int EoW;
+    Node *child[30];
+    Node() {
+        EoW = 0;
+        for (int i = 0; i < 30; i++) {
+            this->child[i] = NULL;
         }
     }
-    cout << dp[n][m] << endl;
-    print_string(n, m, a);
+};
+
+void insert(Node *root, string s) {
+    for (int i = 0; i < s.size(); i++) {
+        int id = s[i] - 'A';
+        if (root->child[id] == NULL)
+            root->child[id] = new Node;
+        root = root->child[id];
+    }
+    root->EoW++;
 }
 
-int32_t main() {
-    YUSUF REZA HASNAT;
-    int t = 1;
-    // cin >> t;
-    for (int i = 1; i <= t; i++) {
-        // case(i)
-        solve();
+bool search(Node *root, string s) {
+    for (int i = 0; i < s.size(); i++) {
+        int id = s[i] - 'A';
+        if (root->child[id] == NULL)
+            return false;
     }
+    int f = 1;
+    root->EoW > 0 ? f = 1 : f = 0;
+    return f;
+}
+
+void print_trie(Node *root, string s = "") {
+    if (root->EoW)
+        cout << s << endl;
+    for (int i = 0; i < 30; i++) {
+        if (root->child[i] != NULL) {
+            char temp = i + 'A';
+            print_trie(root->child[i], s + temp);
+        }
+    }
+}
+
+bool isLeaf(Node *root) {
+    for (int i = 0; i < 30; i++)
+        if (root->child[i] != NULL)
+            return false;
+    return true;
+}
+
+int isJunction(Node *root) {
+    int cnt = 0;
+    for (int i = 0; i < 30; i++)
+        if (root->child[i] != NULL)
+            cnt++;
+    if (cnt > 1 and root->EoW > 0)
+        return 1;
     return 0;
 }
+
+void removeEdge(Node *root, char c, int d) {
+    if (d == 0)
+        return;
+    int r = c - 'A';
+    Node *v = root->child[r];
+    root->child[r] = NULL;
+    delete v;
+}
+
+int dlt(Node *root, string s, int k = 0) {
+    if (root == NULL)
+        return 0;
+    if (s.size() == k) {
+        if (root->EoW) {
+            root->EoW = 0;
+            int x = isLeaf(root);
+            if (x)
+                return 1;
+            else
+                return 0;
+        }
+    }
+    int id = s[k] - 'A';
+    int d = dlt(root->child[id], s, k + 1);
+    int j = isJunction(root->child[id]);
+    removeEdge(root, s[k], j);
+    if (j)
+        d = 0;
+    return d;
+}
+
+int main() {}
