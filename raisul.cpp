@@ -1,183 +1,84 @@
-#include <bits/stdc++.h>
-using namespace std;
-class node {
-   public:
-    int key, val;
-    node() { key = 0, val = 0; }
-    node(int k, int v) { key = k, val = v; }
-};
-class Heap {
-   private:
-    node a[101];
-    int size;
-   public:
-    Heap() { size = 0; }
-   private:
-    void bottomTopAdjust(int i) {
-        while (i > 1) {
-            int child = a[i].key;
-            int parent = a[i / 2].key;
-            if (child > parent)
-                swap(a[i], a[i / 2]);
-            else
-                break;
-            i /= 2;
-        }
-    }
-    void topBottomAdjust(int i) {
-        int lc = 2 * i, rc = lc + 1;
-        if (lc == size) {
-            if (a[lc].key > a[i].key) {
-                swap(a[lc], a[i]);
-                topBottomAdjust(lc);
-            }
-        }
-        else if (rc <= size) {
-            int m;
-            if (a[lc].key > a[i].key)
-                m = lc;
-            else
-                m = i;
-            if (a[rc].key > a[m].key)
-                m = rc;
-            if (m != i) {
-                swap(a[m], a[i]);
-                topBottomAdjust(m);
-            }
-        }
-        else
-            return;
-    }
+//!-----------------------------------------------------!//
+//!                  YUSUF REZA HASNAT                  !//
+//!-----------------------------------------------------!//
 
-   public:
-    bool insert(int key, int val) {
-        if (size == 100)
-            return false;
-        node n(key, val);
-        a[++size] = n;
-        bottomTopAdjust(size);
-        return true;
-    }
-    bool increaseKey(int val, int key) {
-        if (!size)
-            return false;
-        else {
-            for (int i = 1; i <= size; ++i) {
-                if (a[i].val == val and a[i].key < key) {
-                    a[i].key = key;
-                    bottomTopAdjust(i);
-                    return true;
+#pragma GCC optimize("O3")
+#include <bits/stdc++.h>
+#ifndef ONLINE_JUDGE
+#include "C:\Users\Yusuf Reza Hasnat\OneDrive\Desktop\CP\debug.h"
+#else
+#define dbg(x...)
+#define dbgc(x...)
+#endif
+
+using namespace std;
+
+#define int long long
+#define float long double
+#define pb push_back
+#define vf(v) (v).begin(), (v).end()
+#define vr(v) (v).rbegin(), (v).rend()
+#define dosomic(x) fixed << setprecision(x)
+#define endl "\n"
+#define case(x) cout << "Case " << x << ": "
+#define YUSUF ios_base::sync_with_stdio(false),
+#define REZA cin.tie(NULL),
+#define HASNAT cout.tie(NULL)
+
+int mod = 1000000007;
+float pi = acos(-1);
+int inf = 1e18;
+
+vector<pair<int, int>> adj[10005];
+vector<int> parent(10005), cost(10005, inf);
+
+void Dijkstra(int n, int src) {
+    cost[src] = 0;
+    for(int i = 1; i < n; i++){
+        for(int i = 1; i <= n; i++){
+            for(auto it : adj[i]){
+                int u = i;
+                int v = it.first;
+                int wt = it.second;
+                if(cost[u] != inf and cost[u] + wt < cost[v]){
+                    cost[v] = cost[u] + wt;
+                    parent[v] = u;
                 }
             }
-            return false;
         }
     }
-    pair<int, int> showMax() {
-        pair<int, int> p;
-        p.first = a[1].key;
-        p.second = a[1].val;
-        return p;
+}
+
+void solve() {
+    int node, edge;
+    cin >> node >> edge;
+    for (int i = 0; i < edge; i++) {
+        int u, v, wt;
+        cin >> u >> v >> wt;
+        adj[u].push_back({v, wt});
+        // adj[v].push_back({u, wt});
     }
-    int showSize() { return size; }
-    void deleteHead() {
-        swap(a[1], a[size]);
-        size--;
-        topBottomAdjust(1);
+    int src, des;
+    cin >> src >> des;
+    Dijkstra(node, src);
+    vector<int> path;
+    while (des != src) {
+        path.pb(des);
+        des = parent[des];
     }
-    pair<int, int> extractMax() {
-        pair<int, int> p;
-        p.first = a[1].key;
-        p.second = a[1].val;
-        deleteHead();
-        return p;
+    path.pb(src);
+    reverse(vf(path));
+    dbg(path);
+    // dbg(cost);
+}
+
+int32_t main() {
+    YUSUF REZA HASNAT;
+    int t = 1;
+    // cin >> t;
+    for (int i = 1; i <= t; i++) {
+        // case(i)
+        solve();
     }
-    void bfs() {
-        if (size == 0)
-            return;
-        int level = 2;
-        queue<int> q;
-        q.push(1);
-        while (!q.empty()) {
-            int parent = q.front();
-            q.pop();
-            if (parent == level) {
-                cout << endl;
-                level = level * 2;
-            }
-            cout << "{" << a[parent].key << " " << a[parent].val << "}"
-                 << " ";
-            if (2 * parent <= size)
-                q.push(2 * parent);
-            if (2 * parent + 1 <= size)
-                q.push(2 * parent + 1);
-        }
-    }
-};
-int main() {
-    Heap heap;
-
-    while (1) {
-        cout << "1. Insert    2. Increase Key    3. Show Max    4. Extract Max "
-                " 5. Level Order Traversal 6. End"
-             << endl
-             << endl;
-        int choice;
-        cin >> choice;
-
-        if (choice == 1) {
-            cout << "Insert Key: ";
-            int x;
-            cin >> x;
-            cout << "Insert Value: ";
-            int y;
-            cin >> y;
-            bool b = heap.insert(x, y);
-
-            if (b)
-                cout << y << " is inserted in the heap" << endl;
-        }
-        else if (choice == 2) {
-            cout << "Which node's key you want to increase?" << endl;
-            int nodeNo;
-            cin >> nodeNo;
-            cout << "What will be the new key value?" << endl;
-            int keyV;
-            cin >> keyV;
-            bool b = heap.increaseKey(nodeNo, keyV);
-            if (b)
-                cout << "Node's key value increased successfully!" << endl;
-            else
-                cout << "Unsuccessful Operation :(" << endl;
-        }
-
-        else if (choice == 3) {
-            if (heap.showSize() != 0) {
-                pair<int, int> p = heap.showMax();
-                cout << "Key->" << p.first << " Value->" << p.second << endl;
-            }
-            else
-                cout << "No element in the queue" << endl;
-        }
-
-        else if (choice == 4) {
-            if (heap.showSize() != 0) {
-                pair<int, int> p = heap.extractMax();
-                cout << "Key->" << p.first << " Value->" << p.second << endl;
-            }
-            else
-                cout << "No element in the queue" << endl;
-        }
-
-        else if (choice == 5) {
-            cout << "Level Wise Traversal of the Queue:" << endl;
-            heap.bfs();
-            cout << endl;
-        }
-        else if (choice == 6)
-            break;
-        else {
-            cout << "Invalid Choice" << endl;
-        }
-        cout << endl;
-    }
+    return 0;
 }

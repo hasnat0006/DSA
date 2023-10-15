@@ -4,40 +4,18 @@
 
 #pragma GCC optimize("O3")
 #include <bits/stdc++.h>
-#ifndef ONLINE_JUDGE
-#include "C:\Users\Yusuf Reza Hasnat\OneDrive\Desktop\CP\debug.h"
-#else
-#define dbg(x...)
-#define dbgc(x...)
-#endif
-
 using namespace std;
 
 #define int long long
-#define float long double
-#define pb push_back
-#define vf(v) (v).begin(), (v).end()
-#define vr(v) (v).rbegin(), (v).rend()
-#define dosomic(x) fixed << setprecision(x)
-#define endl "\n"
-#define case(x) cout << "Case " << x << ": "
-#define YUSUF ios_base::sync_with_stdio(false),
-#define REZA cin.tie(NULL),
-#define HASNAT cout.tie(NULL)
-
-int mod = 1000000007;
-float pi = acos(-1);
 int inf = 1e18;
 
-void bellmonFord(int n, string src, string dest,
-                 map<string, vector<pair<string, int>>> adj) {
+void bellmonFord(int n, string src, string dest, map<string, vector<pair<string, int>>> &adj) {
     map<string, int> dist;
     map<string, string> parent;
     for (auto i : adj)
         dist[i.first] = inf;
     dist[src] = 0;
-    dbg(dist);
-    for (int step = 0; step < n; step++) {
+    for (int step = 0; step < n - 1; step++) {
         for (auto i : adj) {
             for (auto it : adj[i.first]) {
                 string u = i.first;
@@ -58,7 +36,7 @@ void bellmonFord(int n, string src, string dest,
     path.push_back(src);
     for (auto i : dist)
         cout << i.first << " " << i.second << endl;
-    reverse(vf(path));
+    reverse(path.begin(), path.end());
     for (auto i : path)
         cout << i << " -> ";
 }
@@ -73,14 +51,12 @@ void solve() {
         cin >> u >> v >> wt;
         adj[u].push_back({v, wt});
     }
-    dbg(adj);
     string src, dest;
     cin >> src >> dest;
     bellmonFord(n, src, dest, adj);
 }
 
 int32_t main() {
-    YUSUF REZA HASNAT;
     int t = 1;
     // cin >> t;
     for (int i = 1; i <= t; i++)
@@ -99,5 +75,5 @@ hasnat ifrit 4
 raisul nabiha 7
 nabiha zaima 1
 zaima hasnat -7
-hasnat
+src des
 */

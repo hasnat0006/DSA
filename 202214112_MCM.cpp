@@ -41,16 +41,5 @@ int32_t main() {
     cout << "Total multipication cost: " << MCM(1, n) << endl;
     print_order(1, n);
     cout << endl;
-    // for (int i = 0; i < 10; i++) {
-    //     for (int j = 0; j < 10; j++)
-    //         cout << dp[i][j] << " ";
-    //     cout << endl;
-    // }
-    
-    // for (int i = 0; i < 10; i++) {
-    //     for (int j = 0; j < 10; j++)
-    //         cout << mark[i][j] << " ";
-    //     cout << endl;
-    // }
     return 0;
 }

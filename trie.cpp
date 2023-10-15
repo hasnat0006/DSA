@@ -1,6 +1,4 @@
 #include <bits/stdc++.h>
-
-#include "C:\Users\Yusuf Reza Hasnat\OneDrive\Desktop\CP\debug.h"
 using namespace std;
 
 class Node {
@@ -80,7 +78,6 @@ int deleteTrie(Node *root, string s, int k) {
         if (root->EoW == 0)
             return 0;
         int x = isLeaf(root);
-        dbg(x);
         if (!isLeaf(root)) {
             root->EoW--;
             return 0;
@@ -94,7 +91,6 @@ int deleteTrie(Node *root, string s, int k) {
     int id = s[k] - 'A';
     int d = deleteTrie(root->child[id], s, k + 1);
     int j = isJunction(root->child[id]);
-    dbg(s[k], j);
     removeEdge(root, s[k], d);
     if (j == 1)
         d = 0;

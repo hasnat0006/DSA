@@ -4,35 +4,13 @@
 
 #pragma GCC optimize("O3")
 #include <bits/stdc++.h>
-#ifndef ONLINE_JUDGE
-#include "C:\Users\Yusuf Reza Hasnat\OneDrive\Desktop\CP\debug.h"
-#else
-#define dbg(x...)
-#define dbgc(x...)
-#endif
-
 using namespace std;
 
-#define int long long
-#define float long double
-#define pb push_back
-#define vf(v) (v).begin(), (v).end()
-#define vr(v) (v).rbegin(), (v).rend()
-#define dosomic(x) fixed << setprecision(x)
-#define endl "\n"
-#define case(x) cout << "Case " << x << ": "
-#define YUSUF ios_base::sync_with_stdio(false),
-#define REZA cin.tie(NULL),
-#define HASNAT cout.tie(NULL)
-
-int mod = 1000000007;
-float pi = acos(-1);
-int inf = 1e18;
-
-map<string, string> par;
+const int inf = 1e9;
 
 void dijkstra(int n, string src, string dest,
-              map<string, vector<pair<string, int>>> adj) {
+              map<string, vector<pair<string, int>>> &adj,
+              map<string, string> &par) {
     set<pair<int, string>> s;
     s.insert({0, src});
     map<string, int> dist;
@@ -42,30 +20,26 @@ void dijkstra(int n, string src, string dest,
     dist[src] = 0;
     while (!s.empty()) {
         auto top = *s.begin();
-        int Nodedist = top.first;
-        string Node = top.second;
+        int nodeDis = top.first;
+        string topNode = top.second;
         s.erase(s.begin());
-        for (auto it : adj[Node]) {
+        for (auto it : adj[topNode]) {
             string adjNode = it.first;
-            int adjNodeDist = it.second;
-            if (Nodedist + adjNodeDist < dist[adjNode]) {
-                auto fnd = s.find({dist[adjNode], adjNode});
-                if (fnd != s.end()) {
-                    s.erase(fnd);
-                }
-                dist[adjNode] = Nodedist + adjNodeDist;
+            int adjWt = it.second;
+            if (nodeDis + adjWt < dist[adjNode]) {
+                dist[adjNode] = nodeDis + adjWt;
                 s.insert({dist[adjNode], adjNode});
-                par[adjNode] = Node;
+                par[adjNode] = topNode;
             }
         }
     }
-    dbg(dist);
 }
 
-void solve() {
+int32_t main() {
     int n, m;
     cin >> n >> m;
     map<string, vector<pair<string, int>>> adj;
+    map<string, string> parent;
     for (int i = 0; i < m; i++) {
         string u, v;
         int wt;
@@ -75,16 +49,17 @@ void solve() {
     }
     string src, dest;
     cin >> src >> dest;
-    dijkstra(n, src, dest, adj);
-    dbg(par);
-}
-
-int32_t main() {
-    YUSUF REZA HASNAT;
-    int t = 1;
-    cin >> t;
-    for (int i = 1; i <= t; i++)
-        // case(i)
-        solve();
-    return 0;
+    dijkstra(n, src, dest, adj, parent);
+    vector<string> path;
+    path.push_back(dest);
+    string temp = parent[dest];
+    while (temp != src) {
+        path.push_back(temp);
+        temp = parent[temp];
+    }
+    path.push_back(src);
+    reverse(path.begin(), path.end());
+    for (auto i : path)
+        cout << i << " ";
+    cout << endl;
 }

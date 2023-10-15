@@ -1,16 +1,12 @@
-/// Max Heap
-
 #include <bits/stdc++.h>
 using namespace std;
 
 class Heap {
    private:
     int a[101], size;
-
    public:
     Heap() { size = 0; }
-
-   private:         
+   private:
     void bottomTopAdjust(int i) {
         while (i > 1) {
             int par = i / 2;
@@ -36,7 +32,6 @@ class Heap {
             topBottomAdjust(l);
         }
     }
-
    public:
     bool insert(int val) {
         if (size == 101) {
@@ -46,11 +41,8 @@ class Heap {
         bottomTopAdjust(size);
         return true;
     }
-
     int showMax() { return a[1]; }
-
     int showSize() { return size; }
-
     bool deleteRoot() {
         if (size == 0) {
             return false;
@@ -59,14 +51,12 @@ class Heap {
         topBottomAdjust(1);
         return true;
     }
-
     void buildHeap() {
         int n = size / 2;
         for (int i = n; i > 0; i--) {
             topBottomAdjust(i);
         }
     }
-
     void sort() {
         int last = size, fix = size;
         for (int i = 1; i < fix; i++) {
@@ -76,7 +66,6 @@ class Heap {
         }
         size = fix;
     }
-
     void bfs() {
         if (size == 0)
             return;
@@ -101,7 +90,6 @@ class Heap {
 
 int main() {
     Heap heap;
-
     while (1) {
         cout << "1. Insert\n2. Show Max\n3. Delete Max\n4. Sort\n5. Level\n6. "
                 "Build Heap\n7. End"
@@ -109,24 +97,20 @@ int main() {
              << endl;
         int choice;
         cin >> choice;
-
         if (choice == 1) {
             cout << "Insert Value: ";
             int y;
             cin >> y;
             bool b = heap.insert(y);
-
             if (b)
                 cout << y << " is inserted in the heap" << endl;
         }
-
         else if (choice == 2) {
             if (heap.showSize() != 0)
                 cout << "Max Element: " << heap.showMax();
             else
                 cout << "No element in the heap" << endl;
         }
-
         else if (choice == 3) {
             bool b = heap.deleteRoot();
             if (b)
@@ -135,11 +119,9 @@ int main() {
                 cout << "Heap is empty";
             cout << endl;
         }
-
         else if (choice == 4) {
             heap.sort();
         }
-
         else if (choice == 5) {
             cout << "Level Wise Traversal of the heap:" << endl;
             heap.bfs();
@@ -154,7 +136,6 @@ int main() {
         else if (choice == 7) {
             break;
         }
-
         else {
             cout << "Invalid Choice" << endl;
         }
