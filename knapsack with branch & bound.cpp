@@ -32,7 +32,7 @@ int main() {
     });
     queue<Q> qu;
     int mx = 0;
-    qu.push({-1, 0, 0, findUb(0, 10, 0, v[0].value, v[0].wt)});
+    qu.push({-1, 0, 0, findUb(0, w, 0, v[0].value, v[0].wt)});
     while (!qu.empty()) {
         Q temp = qu.front();
         qu.pop();
