@@ -27,11 +27,6 @@ void coloring(int idx, int total_clr, map<string, int> color = {}) {
     }
 }
 
-void lunching(int idx, int clr) {
-    map<string, int> color;
-    coloring(0, clr, color);
-}
-
 int main() {
     int edges;
     cout << "Number of edges: ", cin >> edges;
