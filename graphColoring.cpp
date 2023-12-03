@@ -1,87 +1,63 @@
-//!-----------------------------------------------------!//
-//!                  YUSUF REZA HASNAT                  !//
-//!-----------------------------------------------------!//
-
-#pragma GCC optimize("O3")
 #include <bits/stdc++.h>
 using namespace std;
 
 int clr;
 map<string, vector<string>> adj;
-map<map<string, int>, int> ans;
+set<map<string, int>> ans;
+vector<string> nodes;
 
-bool isSafe(string child, int clr, map<string, int> color) {
-    if (color[child])
-        return false;
-    for (auto i : adj[child]) {
-        if (color[i] == clr)
+bool isSafe(string s, int clr, map<string, int> color) {
+    for (auto child : adj[s])
+        if (color[child] == clr)
             return false;
-    }
     return true;
 }
 
-void dfs(string start, int total_clr, map<string, int> color) {
+void coloring(int idx, int total_clr, map<string, int> color = {}) {
     if (color.size() == adj.size()) {
-        // for (auto i : color)
-        //     cout << i.first << " -> " << i.second << endl;
-        // cout << "-------\n\n";
-        ans[color]++;
+        ans.insert(color);
         return;
     }
     for (int i = 1; i <= total_clr; i++) {
-        if (isSafe(start, i, color)) {
-            color[start] = i;
-            for (auto child : adj[start])
-                dfs(child, total_clr, color);
-            color.erase(start);
+        if (isSafe(nodes[idx], i, color)) {
+            color[nodes[idx]] = i;
+            coloring(idx + 1, total_clr, color);
+            color.erase(nodes[idx]);
         }
     }
 }
 
-void coloring(string start, int clr) {
+void lunching(int idx, int clr) {
     map<string, int> color;
-    dfs(start, clr, color);
+    coloring(0, clr, color);
 }
 
-void solve() {
+int main() {
     int edges;
     cout << "Number of edges: ", cin >> edges;
     string u, v;
+    set<string> temp;
     for (int i = 0; i < edges; i++) {
         cin >> u >> v;
         adj[u].push_back(v);
         adj[v].push_back(u);
+        temp.insert(v);
+        temp.insert(u);
     }
-    cout << "Number of color you have: \n", cin >> clr;
-    coloring(u, clr);
-    cout << ans.size() << "\n";
-    for (auto i : ans) {
-        for (auto it : i.first) {
-            cout << it.first << " -> " << it.second << endl;
+    for (auto i : temp)
+        nodes.push_back(i);
+    for (int i = 2; i <= 100; i++) {
+        coloring(0, i);
+        if (ans.size()) {
+            cout << "Minimum number of color required: " << i << endl;
+            for (auto i : ans) {
+                for (auto it : i) {
+                    cout << it.first << " -> " << it.second << endl;
+                }
+                cout << "------\n\n";
+            }
+            exit(0);
         }
-        cout << "------\n\n";
+        ans.clear();
     }
 }
-
-int32_t main() {
-    int t = 1;
-    // cin >> t;
-    for (int i = 1; i <= t; i++) {
-        // case(i)
-        solve();
-    }
-    return 0;
-}
-
-/*
-
-7
-0 1
-1 2
-1 4
-0 4
-2 4
-4 3
-2 3
-
-*/
