@@ -9,11 +9,15 @@ vector<string> ans;
 int cnt = 0;
 
 void all_possible_way(vector<string> current = {}) {
-    int f = 0;
+    if (current.size() == nodes.size()) {
+        for (auto i : current)
+            cout << i << " ";
+        cout << endl;
+        cnt++;
+    }
     for (auto i : nodes) {
         if (degree[i] == 0) {
-            f = 1;
-            degree[i] = -1;
+            degree[i]--;
             current.push_back(i);
             for (auto j : adj[i])
                 degree[j]--;
@@ -23,12 +27,6 @@ void all_possible_way(vector<string> current = {}) {
             for (auto j : adj[i])
                 degree[j]++;
         }
-    }
-    if (!f and current.size() == nodes.size()) {
-        for (auto i : current)
-            cout << i << " ";
-        cout << endl;
-        cnt++;
     }
 }
 
@@ -45,8 +43,8 @@ int main() {
         nodes.insert(u);
         nodes.insert(v);
     }
-    // topo_sort();
     all_possible_way();
+    cout << cnt << endl;
     if (cnt == 0) {
         cout << "Cycle exist!\n";
     }
