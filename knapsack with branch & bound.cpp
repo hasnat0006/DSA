@@ -7,8 +7,6 @@ class Node {
     Node(int value, int wt) : value(value), wt(wt) {}
 };
 
-int parent[10005];
-
 class Q {
    public:
     int ind, w, v, u;
@@ -28,6 +26,7 @@ int main() {
         cin >> wt >> value;
         v.push_back(Node(value, wt));
     }
+    // sort the vector where highest value come first.
     sort(v.begin(), v.end(), [&](const Node &a, const Node &b) -> bool {
         return (a.value / a.wt) > (b.value / b.wt);
     });
@@ -38,8 +37,6 @@ int main() {
         Q temp = qu.front();
         qu.pop();
         mx = max(mx, temp.v);
-        // cout << temp.ind << " " << temp.w << " " << temp.v << " " << temp.u
-        // << endl;
         int ind = temp.ind;
         if (ind + 2 >= n)
             continue;
@@ -50,7 +47,7 @@ int main() {
         int takeUb = findUb(takeV, w, takeW, v[ind + 2].value, v[ind + 2].wt);
         int notakeUb =
             findUb(notakeV, w, notakeW, v[ind + 2].value, v[ind + 2].wt);
-        if (takeW <= w && takeV < takeUb)
+        if (takeW <= w and mx < takeUb)
             qu.push({ind + 1, takeW, takeV, takeUb});
         if (notakeV < notakeUb)
             qu.push({ind + 1, notakeW, notakeV, notakeUb});
