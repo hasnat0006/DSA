@@ -4,13 +4,6 @@
 
 #pragma GCC optimize("O3")
 #include <bits/stdc++.h>
-#ifndef ONLINE_JUDGE
-#include "C:\Users\Yusuf Reza Hasnat\OneDrive\Desktop\CP\debug.h"
-#else
-#define dbg(x...)
-#define dbgc(x...)
-#endif
-
 using namespace std;
 
 #define int long long
