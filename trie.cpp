@@ -82,10 +82,6 @@ int deleteTrie(Node *root, string s, int k) {
             root->EoW--;
             return 0;
         }
-        // else if (isLeaf(root) && root->EoW > 1) {
-        //     root->EoW--;
-        //     return 0;
-        // }
         return 1;
     }
     int id = s[k] - 'A';
